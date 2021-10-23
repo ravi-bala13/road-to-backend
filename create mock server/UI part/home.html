@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home.html</title>
+</head>
+<style>
+    div{
+        width: 13%;
+    }
+    .container{
+        /* border: 1px solid red; */
+        margin: auto;
+    }
+    h1{
+        text-align: center;
+    }
+</style>
+<body>
+
+    <h1>Add Products</h1>
+<div class="container">
+
+    <input type="number" name="" id="id" placeholder="Id"><br><br>
+    <input type="text" name="" id="name" placeholder="Name"><br><br>
+    <input type="number" name="" id="price" placeholder="Price"><br><br>
+    <button onclick="addProducts()">Add Products</button> &nbsp;<button onclick="updateProducts()">update</button>
+
+</div>
+    <h1>Delete Products</h1>
+    <div class="container">
+
+        <input type="text" id="del-id" placeholder="Enter id to delete"><br><br>
+        <button onclick="deleteProducts()">Delete</button>
+
+    </div>
+    
+</body>
+</html>
+
+<script>
+
+// async function getData(){
+
+//     let res = await fetch('http://localhost:7000/api/products')
+//     let data = await res.json();
+//     console.log('data:', data)
+
+// }
+// getData();
+
+async function addProducts(){
+
+    let data = {
+        id: +(document.getElementById("id").value),
+        name: document.getElementById("name").value,
+        price: document.getElementById("price").value,
+    };
+    
+    try{
+
+        let res = await fetch('http://localhost:5000/api/products',{
+
+        method:'POST',
+        body:JSON.stringify(data),
+        headers:{
+
+            'Content-Type': "application/json",
+
+        }
+
+        });
+
+        let d = await res.json();
+        console.log('data:', data)
+        alert("sucessfully added")
+
+    }
+    catch(err){
+        alert("Error 404")
+        console.log('err:', err)
+
+    }
+
+}
+
+// *************update products using PUT method
+
+async function updateProducts(){
+
+let data = {
+    id: document.getElementById("id").value,
+    name: document.getElementById("name").value,
+    price: document.getElementById("price").value,
+};
+
+try{
+    console.log(data.id);
+    let res = await fetch(`http://localhost:5000/api/products/${data.id}`,{
+
+    method:'PUT',
+    body:JSON.stringify(data),
+    headers:{
+
+        'Content-Type': "application/json",
+
+    }
+
+    });
+
+    let d = await res.json();
+    console.log('data:', data)
+    alert("Updated sucessfully")
+
+}
+catch(err){
+    alert("Error 404")
+    console.log('err:', err)
+
+}
+
+}
+
+// *************delete products using DELETE method
+
+async function deleteProducts(){
+
+    let id = document.getElementById("del-id").value;
+    console.log('id:', id)
+
+    try{
+        
+        let res = await fetch(`http://localhost:5000/api/products/${id}`,{
+
+        method:'DELETE',
+        
+        headers:{
+
+            'Content-Type': "application/json",
+
+        }
+
+        });
+
+        let d = await res.json();
+        
+        alert("Deleted sucessfully")
+
+    }
+    catch(err){
+        alert("Error 404")
+        console.log('err:', err)
+
+    }
+
+}
+
+
+</script>
